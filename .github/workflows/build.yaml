@@ -23,8 +23,8 @@ jobs:
         run: go build ./cmd/geoguessr
       - name: Run vet & lint
         run: |
-          go vet .
-          golint .
+          go vet ./cmd/geoguessr
+          golint ./cmd/geoguessr
   deploy:
     runs-on: ubuntu-latest
     # Only run this workflow when "build" workflow succeeds
