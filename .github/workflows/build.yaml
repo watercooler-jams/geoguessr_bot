@@ -34,4 +34,5 @@ jobs:
       with:
         username: ${{ secrets.REGISTRY_TOKEN }}
         repository: watercooler-jams/geoguessr
-        tag_with_ref: true
+        push: true
+        tags: watercooler-jams/geoguessr:latest
