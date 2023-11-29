@@ -3,6 +3,7 @@ package geoguessr
 import (
 	"bytes"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io"
 	"net/http"
@@ -23,10 +24,13 @@ func Login(client *http.Client, email string, password string) (*model.LoginResp
 	}
 
 	url := geoguessrUrl + signinPath
-	body, err := send(client, url, payload)
+	resp, err := send(client, url, payload)
+	if err != nil {
+		return nil, err
+	}
 
 	response := model.LoginResponse{}
-	json.Unmarshal(body, &response)
+	json.Unmarshal(resp, &response)
 	return &response, nil
 }
 
@@ -55,6 +59,9 @@ func CreateChallenge(client *http.Client, mapConfig *model.MapConfig) (*model.Cr
 	}
 
 	resp, err := send(client, url, request)
+	if err != nil {
+		return nil, err
+	}
 
 	response := model.CreateChallengeResponse{}
 	json.Unmarshal(resp, &response)
@@ -100,6 +107,11 @@ func send(client *http.Client, url string, payload *[]byte) ([]byte, error) {
 	util.PrintResponse(resp)
 
 	defer resp.Body.Close()
+
+	if resp.StatusCode >= 400 {
+		return nil, errors.New(fmt.Sprintf("Request failed with status %s", resp.Status))
+	}
+
 	body, err := io.ReadAll(resp.Body)
 	if err != nil {
 		fmt.Printf("Error reading response: %s\n", err)
