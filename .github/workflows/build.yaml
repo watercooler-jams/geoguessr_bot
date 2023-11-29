@@ -1,0 +1,41 @@
+name: Geoguessr CI
+
+on: 
+  push: 
+    branches: 
+      - master
+      - feature/ci
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v4
+        with:
+          go-version: '>=1.21.0'
+      - name: Install dependencies
+        run: |
+          go version
+          go mod download
+          go get -u golang.org/x/lint/golint
+      - name: Run build
+        run: go build ./cmd/geoguessr
+      - name: Run vet & lint
+        run: |
+          go vet .
+          golint .
+  deploy:
+    runs-on: ubuntu-latest
+    # Only run this workflow when "build" workflow succeeds
+    needs: [build]
+    # Only run this workflow if it is master branch on push event
+    # if: ${{ github.ref == 'refs/heads/master' && github.event_name == 'push' }} 
+    steps:
+    - uses: actions/checkout@v4
+    - name: Deploy to Docker registry
+      uses: docker/build-push-action@v5
+      with:
+        username: ${{ secrets.REGISTRY_TOKEN }}
+        repository: watercooler-jams/geoguessr_bot
+        tag_with_ref: true
