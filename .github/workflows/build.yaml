@@ -33,5 +33,5 @@ jobs:
       uses: docker/build-push-action@v5
       with:
         username: ${{ secrets.REGISTRY_TOKEN }}
-        repository: watercooler-jams/geoguessr_bot
+        repository: watercooler-jams/geoguessr
         tag_with_ref: true
