@@ -50,12 +50,21 @@ var maps = map[string]model.MapConfig{
 		Type:           "STREAK",
 		StreakType:     "CountryStreak",
 	},
+	"EXTRAORDINARY_WORLD": {
+		ForbidMoving:   false,
+		ForbidRotating: false,
+		ForbidZooming:  false,
+		TimeLimit:      120,
+		MapId:          "5cd30a0d17e6fc441ceda867",
+		Type:           "MAP",
+	},
 }
 
 var mapsPerDay = map[int]string{
 	1: "DIVERSE_WORLD",
 	2: "URBAN_WORLD",
 	3: "COUNTRY_STREAK",
+	4: "EXTRAORDINARY_WORLD",
 	5: "GEODETECTIVE",
 }
 
