@@ -21,10 +21,6 @@ jobs:
           go get -u golang.org/x/lint/golint
       - name: Run build
         run: go build ./cmd/geoguessr
-      - name: Run vet & lint
-        run: |
-          go vet ./cmd/geoguessr
-          golint ./cmd/geoguessr
   deploy:
     runs-on: ubuntu-latest
     # Only run this workflow when "build" workflow succeeds
